@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.application.server.model.User" table="User">
+
+		<id column="UserId" name="userId" type="java.lang.Integer">
+			<generator class="native" />
+		</id>
+		<property column="Email" name="email" type="java.lang.String" />
+		<property column="FacebookId" name="facebookId" type="java.lang.String" />
+		<property column="FacebookData" type="text" name="facebookData"
+			length="10000" />
+		<property column="FacebookToken" name="facebookToken" type="text" />
+		<property column="FacebookPermission" name="fbPermission"
+			type="java.lang.String" />
+
+
+		<property column="Profile_Pic" name="profilePic" type="java.lang.String" />
+		<property column="Username" name="userName" type="java.lang.String" />
+		<property column="Phone" name="phone" type="java.lang.String" />
+		<property column="Bio" name="bio" type="text" length="10000" />
+		<property column="Verified" name="isVerified" type="java.lang.Integer" />
+		<property column="Created" name="created" type="java.lang.Long" />
+		<property column="Modified" name="modified" type="java.lang.Long" />
+
+	</class>
+</hibernate-mapping>

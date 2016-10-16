@@ -16,7 +16,7 @@
 		<property name="hibernate.hbm2ddl.auto">update</property>
 
 		<!-- General Tables -->
-		<mapping resource="com/application/zapplon/model/session.hbm.xml" />
+		<mapping resource="com/application/server/model/session.hbm.xml" />
 		<mapping resource="com/application/server/model/user.hbm.xml" />
 		<mapping resource="com/application/server/model/ride.hbm.xml" />
 		<mapping resource="com/application/server/model/userride.hbm.xml" />

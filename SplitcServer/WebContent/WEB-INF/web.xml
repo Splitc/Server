@@ -28,6 +28,6 @@
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
 	<listener>
-		<listener-class>com.application.server.util.Zapp</listener-class>
+		<listener-class>com.application.server.utils.Zapp</listener-class>
 	</listener>
 </web-app>

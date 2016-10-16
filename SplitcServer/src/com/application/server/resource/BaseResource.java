@@ -31,8 +31,7 @@ public class BaseResource {
 		if (!(appType.equals(CommonLib.ANDROID_APP_TYPE) || appType.equals(CommonLib.WEB_APP_TYPE)))
 			retValue = "Invalid app type";
 
-		if (retValue.equals("Invalid app type") || retValue.equals("Invalid client id")
-				|| retValue.equals("Invalid params")) {
+		if (retValue.equals("Invalid app type") || retValue.equals("Invalid client id")) {
 			return retValue;
 		} else
 			return "success";

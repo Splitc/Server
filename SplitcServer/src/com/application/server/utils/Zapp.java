@@ -8,8 +8,10 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import com.application.server.controller.UserDao;
+
 public class Zapp implements ServletContextListener {
-	
+
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
 		zappObject = null;
@@ -25,17 +27,22 @@ public class Zapp implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent arg0) {
 
 		archiveOtpService = Executors.newScheduledThreadPool(1);
-		
+
 		if (zappObject == null)
 			zappObject = new Zapp();
 
 		archiveOtpService.scheduleAtFixedRate(new Runnable() {
 			public void run() {
-//				zappObject.phoneVerification();
-//				zappObject.oauthVerification();
+				zappObject.phoneVerification();
+				// zappObject.oauthVerification();
 			}
 		}, 0, 3, TimeUnit.MINUTES);
 
+	}
+
+	private void phoneVerification() {
+		UserDao userDao = new UserDao();
+		userDao.userActive("");
 	}
 
 }

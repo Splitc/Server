@@ -15,8 +15,9 @@ import com.application.server.utils.exception.ZException;
 
 public class CommonLib {
 
-	public static final String ANDROID_CLIENT_ID = "bt_android_client";
-	public static final String ANDROID_APP_TYPE = "bt_android";
+	public static final String ANDROID_CLIENT_ID = "splitc_android_client";
+	public static final String ANDROID_APP_TYPE = "splitc_android";
+
 
 	public static final String ANDROID_PUSH_CLIENT_ID = "zapp_android_push_client";
 	public static final String ANDROID_PUSH_APP_TYPE = "zapp_android_push";
@@ -50,8 +51,8 @@ public class CommonLib {
 	public static final boolean ZLOG = false;
 	public static final boolean LIVE_BUILD = false;
 
-	public static final String ZAPP_ID = "hello@zapplon.com";
-	public static final String ZAPP_PWD = "hello.zapplon";
+	public static final String ZAPP_ID = "";
+	public static final String ZAPP_PWD = "";
 
 	public static final int APP_REFER_STATUS_POINTS_REDEEMED = 1;
 	public static final int APP_REFER_STATUS_POINTS_NOT_REDEEMED = 0;
@@ -225,10 +226,19 @@ public class CommonLib {
 	public static final int TYPE_SAVAARI_INDICA = 57;
 
 	// Payment creds
-	public static final String TYPE_ZAPPLON_PAYMENT_URL = "https://test.payu.in/_payment"; // live: https://secure.payu.in/_payment, dev:https://test.payu.in/_payment 
-	public static final String ZAPPLON_PAYMENT_KEY = "dRQuiA"; // live: 3s6sTaSM, dev: fB7m8s
-	public static final String ZAPPLON_PAYMENT_SALT = "teEkuVg2"; // live: 1ec1B3P2r7, dev: eRis5Chv
-	public static final String ZAPPLON_PAYMENT_MERCHANT_ID = "4928174"; // live: 5611077, dev:4928174 
+	public static final String TYPE_ZAPPLON_PAYMENT_URL = "https://test.payu.in/_payment"; // live:
+																							// https://secure.payu.in/_payment,
+																							// dev:https://test.payu.in/_payment
+	public static final String ZAPPLON_PAYMENT_KEY = "dRQuiA"; // live:
+																// 3s6sTaSM,
+																// dev: fB7m8s
+	public static final String ZAPPLON_PAYMENT_SALT = "teEkuVg2"; // live:
+																	// 1ec1B3P2r7,
+																	// dev:
+																	// eRis5Chv
+	public static final String ZAPPLON_PAYMENT_MERCHANT_ID = "4928174"; // live:
+																		// 5611077,
+																		// dev:4928174
 	public static final String ZAPPLON_PAYMENT_SUCCESS_URL = "http://zapplon.com/intercity/";
 	public static final String ZAPPLON_PAYMENT_FAILURE_URL = "http://zapplon.com/intercity/";
 
@@ -348,15 +358,8 @@ public class CommonLib {
 	/**
 	 * Android API constants
 	 */
-	// public static String projectId = "531855430941";// "792616879007";
-	// public static String apiKey =
-	// "AIzaSyC1Zbn_ROSWO-l4IJYTDaeyBTEit3fn9FI";//
-	// "AIzaSyAJBGj_8aaNykTNaPxdayggDMyxzArE7gM";
-	public static String projectId = "481732547877"; // "792616879007";
-	// AIzaSyB90cL_xUvPwb6aXKcE-3cdstTuWx5eVe8
-	//
-	// AIzaSyDL-nWzH88Vju_mmm_qjwfCxmizYrS7iyA
-	public static String apiKey = "AIzaSyDL-nWzH88Vju_mmm_qjwfCxmizYrS7iyA";// "AIzaSyAJBGj_8aaNykTNaPxdayggDMyxzArE7gM";
+	public static String projectId = "996855199819"; 
+	public static String apiKey = "AIzaSyBzi76XfJsZGSk-jHY0Wgr2XHecirwTiJY	";
 	public static final String GCM_SERVER = "gcm.googleapis.com";
 	public static final int GCM_PORT = 5235;
 	public static final String GCM_ELEMENT_NAME = "gcm";
@@ -706,6 +709,13 @@ public class CommonLib {
 
 	public static String getHiddenFieldForm(String name, String value) {
 		return "<input type=\"hidden\" name=\"" + name + "\" value=\"" + value + "\" />";
+	}
+
+	public static String getDistanceQuery(double myLatitude, String locationLatitude, double myLongitude,
+			String locationLongitude) {
+		return "3956 * 2 * ASIN(SQRT(POWER(SIN((" + myLatitude + " - " + locationLatitude
+				+ ") * pi()/180 / 2), 2) + COS(" + myLatitude + " * pi()/180) * COS(" + locationLatitude
+				+ " * pi()/180) * POWER(SIN((" + myLongitude + " - " + locationLongitude + ") * pi()/180 / 2), 2)))";
 	}
 
 }

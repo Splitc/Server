@@ -46,7 +46,7 @@ public class UserSession extends BaseResource {
 			@FormParam("user_name") String userName, @FormParam("email") String email, @FormParam("phone") String phone,
 			@FormParam("bio") String bio, @FormParam("registration_id") String regId,
 			@FormParam("latitude") double latitude, @FormParam("longitude") double longitude,
-			@QueryParam("device_id") String deviceId, @FormParam("fbid") String fbId,
+			@FormParam("fbid") String fbId,
 			@FormParam("fbdata") String fbData, @FormParam("fb_token") String fbToken,
 			@FormParam("fb_permission") String fb_permissions, @Context HttpServletRequest requestContext
 
@@ -131,18 +131,17 @@ public class UserSession extends BaseResource {
 			return CommonLib.getResponseString("Error", "Some error occured", CommonLib.RESPONSE_INVALID_PARAMS);
 
 		int status = CommonLib.RESPONSE_SUCCESS;
-		String imei = deviceId;
 		Location location = new Location(latitude, longitude);
 		UserSessionDao userSessionDao = new UserSessionDao();
 		// Generate Access Token
-		Object[] tokens = userSessionDao.generateAccessToken(user.getUserName(), user.getUserId(), imei, regId,
+		Object[] tokens = userSessionDao.generateAccessToken(user.getUserName(), user.getUserId(), "", regId,
 				location);
 		String accessToken = (String) tokens[0];
 		boolean exists = (Boolean) tokens[1];
 
 		boolean sessionAdded = false;
 		if (!exists) {
-			sessionAdded = userSessionDao.addSession(user.getUserId(), accessToken, regId, location, imei);
+			sessionAdded = userSessionDao.addSession(user.getUserId(), accessToken, regId, location, "");
 		} else {
 			sessionAdded = true;
 		}

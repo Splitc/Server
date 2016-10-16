@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="com.application.server.model.User" table="User">
+	<class name="com.application.server.model.UserRide" table="UserRide">
 
 		<id column="UserRideId" name="userRideId" type="java.lang.Integer">
 			<generator class="native" />
@@ -12,8 +12,7 @@
 		<property column="UserId" name="userId" type="java.lang.Integer" />
 		<property column="TravellerId" name="travellerId" type="java.lang.Integer" />
 		<property column="Rating" name="rating" type="java.lang.Double" />
-		<property column="Created" name="created" type="java.lang.Longouble" />
+		<property column="Created" name="created" type="java.lang.Long" />
 		
 	</class>
 </hibernate-mapping>
- 

@@ -18,7 +18,6 @@ public class CommonLib {
 	public static final String ANDROID_CLIENT_ID = "splitc_android_client";
 	public static final String ANDROID_APP_TYPE = "splitc_android";
 
-
 	public static final String ANDROID_PUSH_CLIENT_ID = "zapp_android_push_client";
 	public static final String ANDROID_PUSH_APP_TYPE = "zapp_android_push";
 
@@ -64,9 +63,12 @@ public class CommonLib {
 	public static final int RIDE_STATUS_FULFILLED = 102;
 	public static final int RIDE_STATUS_EXPIRED = 103;
 	public static final int RIDE_STATUS_CANCELLED = 104;
-	
+
+	public static final int RIDE_ACCEPTED = 200;
+	public static final int RIDE_CANCELLED = 201;
+
 	public static final int THRESHOLD_DELETION = 1000 * 60 * 60 * 2;
-	
+
 	public static final int DEAL_TYPE_1 = 1;
 	public static final int DEAL_TYPE_2 = 2;
 	public static final int DEAL_TYPE_3 = 3;
@@ -366,7 +368,7 @@ public class CommonLib {
 	/**
 	 * Android API constants
 	 */
-	public static String projectId = "996855199819"; 
+	public static String projectId = "996855199819";
 	public static String apiKey = "AIzaSyBzi76XfJsZGSk-jHY0Wgr2XHecirwTiJY	";
 	public static final String GCM_SERVER = "gcm.googleapis.com";
 	public static final int GCM_PORT = 5235;

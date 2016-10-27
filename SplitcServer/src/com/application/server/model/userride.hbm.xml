@@ -14,5 +14,19 @@
 		<property column="Rating" name="rating" type="java.lang.Double" />
 		<property column="Created" name="created" type="java.lang.Long" />
 		
+		<property column="FromAddress" name="fromAddress" type="java.lang.String" />
+		<property column="StartLat" name="startLat" type="java.lang.Double" />
+		<property column="StartLon" name="startLon" type="java.lang.Double" />
+		<property column="startGooglePlaceId" name="startGooglePlaceId" type="java.lang.String" />
+		
+		<property column="ToAddress" name="toAddress" type="java.lang.String" />
+		<property column="DropLat" name="dropLat" type="java.lang.Double" />
+		<property column="DropLon" name="dropLon" type="java.lang.Double" />
+		<property column="dropGooglePlaceId" name="dropGooglePlaceId" type="java.lang.String" />
+		
+		<property column="Status" name="status" type="java.lang.Integer" />
+		
+		<property column="description" name="description" type="java.lang.String" />
+		
 	</class>
 </hibernate-mapping>

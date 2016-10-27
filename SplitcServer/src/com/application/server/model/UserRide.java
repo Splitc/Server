@@ -10,6 +10,21 @@ public class UserRide implements Serializable {
 	private int travellerId;
 	private double rating;
 	private long created;
+	
+	// pickup point
+	private String fromAddress;
+	private double startLat;
+	private double startLon;
+	private String startGooglePlaceId;
+
+	// drop point
+	private String toAddress;
+	private double dropLat;
+	private double dropLon;
+	private String dropGooglePlaceId;
+	
+	private int status;
+	private String description;
 
 	public UserRide() {
 	}
@@ -61,5 +76,85 @@ public class UserRide implements Serializable {
 	public void setCreated(long created) {
 		this.created = created;
 	}
-	
+
+	public String getFromAddress() {
+		return fromAddress;
+	}
+
+	public void setFromAddress(String fromAddress) {
+		this.fromAddress = fromAddress;
+	}
+
+	public double getStartLat() {
+		return startLat;
+	}
+
+	public void setStartLat(double startLat) {
+		this.startLat = startLat;
+	}
+
+	public double getStartLon() {
+		return startLon;
+	}
+
+	public void setStartLon(double startLon) {
+		this.startLon = startLon;
+	}
+
+	public String getStartGooglePlaceId() {
+		return startGooglePlaceId;
+	}
+
+	public void setStartGooglePlaceId(String startGooglePlaceId) {
+		this.startGooglePlaceId = startGooglePlaceId;
+	}
+
+	public String getToAddress() {
+		return toAddress;
+	}
+
+	public void setToAddress(String toAddress) {
+		this.toAddress = toAddress;
+	}
+
+	public double getDropLat() {
+		return dropLat;
+	}
+
+	public void setDropLat(double dropLat) {
+		this.dropLat = dropLat;
+	}
+
+	public double getDropLon() {
+		return dropLon;
+	}
+
+	public void setDropLon(double dropLon) {
+		this.dropLon = dropLon;
+	}
+
+	public String getDropGooglePlaceId() {
+		return dropGooglePlaceId;
+	}
+
+	public void setDropGooglePlaceId(String dropGooglePlaceId) {
+		this.dropGooglePlaceId = dropGooglePlaceId;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 }

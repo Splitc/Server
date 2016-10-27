@@ -15,8 +15,10 @@ import org.codehaus.jettison.json.JSONObject;
 
 import com.application.server.controller.RideDao;
 import com.application.server.controller.UserDao;
+import com.application.server.controller.UserRideDao;
 import com.application.server.model.Ride;
 import com.application.server.model.User;
+import com.application.server.model.UserRide;
 import com.application.server.utils.CommonLib;
 import com.application.server.utils.JsonUtil;
 import com.application.server.utils.exception.ZException;
@@ -39,8 +41,8 @@ public class RideResource extends BaseResource {
 			@FormParam("startLat") double startLat, @FormParam("startLon") double startLon,
 			@FormParam("startGooglePlaceId") String startGooglePlaceId, @FormParam("toAddress") String toAddress,
 			@FormParam("dropLat") double dropLat, @FormParam("dropLon") double dropLon,
-			@FormParam("dropGooglePlaceId") String dropGooglePlaceId,
-			@FormParam("requiredPersons") int requiredPersons, @FormParam("description") String description) {
+			@FormParam("dropGooglePlaceId") String dropGooglePlaceId, @FormParam("requiredPersons") int requiredPersons,
+			@FormParam("description") String description) {
 
 		String clientCheck = super.clientCheck(clientId, appType);
 		if (clientCheck != null && !clientCheck.equals("success"))
@@ -114,6 +116,14 @@ public class RideResource extends BaseResource {
 				JSONArray jsonArr = new JSONArray();
 				for (Ride wish : rides) {
 					JSONObject wishJson = JsonUtil.getRideJson(wish);
+
+					JSONArray userArr = new JSONArray();
+					UserRideDao userRideDao = new UserRideDao();
+					List<User> acceptedUsers = userRideDao.getAcceptedUsers(wish.getRideId());
+					for (User acceptedUser : acceptedUsers) {
+						userArr.put(JsonUtil.getUserJson(acceptedUser));
+					}
+					wishJson.put("accepted_users", userArr);
 					jsonArr.put(wishJson);
 				}
 				returnObject.put("rides", jsonArr);
@@ -122,6 +132,57 @@ public class RideResource extends BaseResource {
 
 			}
 			return CommonLib.getResponseString(returnObject, "success", CommonLib.RESPONSE_SUCCESS);
+		} else
+			return CommonLib.getResponseString("failure", "", CommonLib.RESPONSE_FAILURE);
+	}
+
+	// TODO: if action is already taken for the particular ride, then reject
+	// TODO: action for rating vs the new ride acceptance
+	// TODO: action for cancellation
+	// TODO: check for add vs update
+	@Path("/action")
+	@POST
+	@Produces("application/json")
+	@Consumes("application/x-www-form-urlencoded")
+	public JSONObject updateUserRide(@FormParam("client_id") String clientId, @FormParam("app_type") String appType,
+			@FormParam("access_token") String accessToken, @FormParam("action") int start,
+			@FormParam("rideId") int rideId, @FormParam("fromAddress") String fromAddress,
+			@FormParam("startLat") double startLat, @FormParam("startLon") double startLon,
+			@FormParam("startGooglePlaceId") String startGooglePlaceId, @FormParam("toAddress") String toAddress,
+			@FormParam("dropLat") double dropLat, @FormParam("dropLon") double dropLon,
+			@FormParam("dropGooglePlaceId") String dropGooglePlaceId, @FormParam("description") String description,
+			@FormParam("rating") float rating) {
+
+		String clientCheck = super.clientCheck(clientId, appType);
+		if (clientCheck != null && !clientCheck.equals("success"))
+			return CommonLib.getResponseString("Invalid params", "", CommonLib.RESPONSE_INVALID_PARAMS);
+
+		UserDao userDao = new UserDao();
+
+		// access token validity
+		User user = userDao.userActive(accessToken);
+
+		if (user != null && user.getUserId() > 0) {
+			UserRideDao userRideDao = new UserRideDao();
+
+			UserRide userRide = new UserRide();
+			userRide.setCreated(System.currentTimeMillis());
+			userRide.setDescription(description);
+			userRide.setDropGooglePlaceId(dropGooglePlaceId);
+			userRide.setDropLat(dropLat);
+			userRide.setDropLon(dropLon);
+			userRide.setFromAddress(fromAddress);
+			userRide.setRating(rating);
+			userRide.setRideId(rideId);
+			userRide.setStartGooglePlaceId(startGooglePlaceId);
+			userRide.setStartLat(startLat);
+			userRide.setTravellerId(user.getUserId());
+			userRide.setToAddress(toAddress);
+			// userRide.setStatus(status);
+			userRide.setStartLon(startLon);
+			// userRide.setUserId(userId);
+			userRide = userRideDao.addRide(userRide);
+			return CommonLib.getResponseString(userRide, "success", CommonLib.RESPONSE_SUCCESS);
 		} else
 			return CommonLib.getResponseString("failure", "", CommonLib.RESPONSE_FAILURE);
 	}

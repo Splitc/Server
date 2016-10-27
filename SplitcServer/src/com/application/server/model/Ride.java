@@ -5,22 +5,27 @@ import java.io.Serializable;
 public class Ride implements Serializable {
 
 	private int rideId;
-	
+
 	private String fromAddress;
 	private double startLat;
 	private double startLon;
-	
+	private String startGooglePlaceId;
+
 	private String toAddress;
 	private double dropLat;
 	private double dropLon;
-	
-	private int userId; // wish posting user
+	private String dropGooglePlaceId;
+
+	private int status;
 	private long created;
 
 	private int requiredPersons;
-	private int status;
-	
-	public Ride(){}
+	private String description;
+
+	private int userId; // wish posting user
+
+	public Ride() {
+	}
 
 	public int getRideId() {
 		return rideId;
@@ -108,6 +113,30 @@ public class Ride implements Serializable {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public String getStartGooglePlaceId() {
+		return startGooglePlaceId;
+	}
+
+	public void setStartGooglePlaceId(String startGooglePlaceId) {
+		this.startGooglePlaceId = startGooglePlaceId;
+	}
+
+	public String getDropGooglePlaceId() {
+		return dropGooglePlaceId;
+	}
+
+	public void setDropGooglePlaceId(String dropGooglePlaceId) {
+		this.dropGooglePlaceId = dropGooglePlaceId;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 }

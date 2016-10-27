@@ -17,6 +17,7 @@ import com.application.server.utils.CommonLib;
 import com.application.server.utils.mailer.EmailModel;
 import com.application.server.utils.mailer.EmailUtil;
 
+@Path("/user")
 public class UserResource extends BaseResource {
 
 	public static final String LOGGER = "UserResource.class";

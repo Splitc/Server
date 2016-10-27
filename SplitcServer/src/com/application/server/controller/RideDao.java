@@ -22,15 +22,16 @@ public class RideDao extends BaseDao {
 	}
 
 	// add your ride
-	public boolean addRide(Ride ride) {
+	public Ride addRide(Ride newRide) {
+		Ride ride = null;
 		Session session = null;
 		info("addSession enter");
 		try {
 			session = DBUtil.getSessionFactory().openSession();
 
 			Transaction transaction = session.beginTransaction();
-			session.save(ride);
-
+			session.save(newRide);
+			ride = newRide;
 			transaction.commit();
 			session.close();
 
@@ -41,17 +42,16 @@ public class RideDao extends BaseDao {
 				e1.printStackTrace();
 			}
 			error("Hibernate exception: " + e.getMessage());
-			return false;
 		} finally {
 			if (session != null && session.isOpen())
 				session.close();
 		}
 		info("addRide exit");
-		return true;
+		return ride;
 	}
 
 	// view your rides
-	public ArrayList<Ride> getMyRides(int userId) {
+	public ArrayList<Ride> getMyRides(int userId, int start, int count) {
 		ArrayList<Ride> rides = new ArrayList<Ride>();
 		Session session = null;
 		info("getMyRides enter");
@@ -60,10 +60,12 @@ public class RideDao extends BaseDao {
 
 			Transaction transaction = session.beginTransaction();
 
-			String sql = "SELECT * FROM Ride WHERE UserId = :userId";
+			String sql = "SELECT * FROM Ride WHERE UserId = :userId LIMIT :start, :count";
 			SQLQuery query = session.createSQLQuery(sql);
 			query.addEntity(Ride.class);
 			query.setParameter("userId", userId);
+			query.setParameter("start", start);
+			query.setParameter("count", count);
 			java.util.List results = (java.util.List) query.list();
 
 			for (Iterator iterator = ((java.util.List) results).iterator(); iterator.hasNext();) {
@@ -128,13 +130,14 @@ public class RideDao extends BaseDao {
 	public ArrayList<Ride> getFeedRides(int userId, double startLatitude, double startLongitude, double endLatitude,
 			double endLongitude) {
 		ArrayList<Ride> rides = new ArrayList<Ride>();
-		
-		// iterating over all the current rides which fall under the specified radius
-		
+
+		// iterating over all the current rides which fall under the specified
+		// radius
+
 		// check if any ride is traveling to the similar distance
-		
+
 		// return that ride
-		
+
 		info("getMyRides exit");
 		return rides;
 	}

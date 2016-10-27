@@ -59,6 +59,12 @@ public class CommonLib {
 
 	public static final double PERCENTAGE_ZAPP = 0.8;
 
+	public static final int RIDE_STATUS_CREATED = 100;
+	public static final int RIDE_STATUS_ACCEPTED = 101;
+	public static final int RIDE_STATUS_FULFILLED = 102;
+	public static final int RIDE_STATUS_EXPIRED = 103;
+	public static final int RIDE_STATUS_CANCELLED = 104;
+	
 	public static final int DEAL_TYPE_1 = 1;
 	public static final int DEAL_TYPE_2 = 2;
 	public static final int DEAL_TYPE_3 = 3;

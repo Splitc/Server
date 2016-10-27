@@ -8,10 +8,14 @@ import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.omg.CORBA.COMM_FAILURE;
 
 import com.application.server.model.Ride;
+import com.application.server.utils.CommonLib;
 import com.application.server.utils.DBUtil;
 import com.application.server.utils.exception.ZException;
+
+import gnu.io.CommPortOwnershipListener;
 
 public class RideDao extends BaseDao {
 
@@ -60,7 +64,7 @@ public class RideDao extends BaseDao {
 
 			Transaction transaction = session.beginTransaction();
 
-			String sql = "SELECT * FROM Ride WHERE UserId = :userId LIMIT :start, :count";
+			String sql = "SELECT * FROM Ride WHERE UserId = :userId order by Created LIMIT :start, :count";
 			SQLQuery query = session.createSQLQuery(sql);
 			query.addEntity(Ride.class);
 			query.setParameter("userId", userId);
@@ -150,5 +154,44 @@ public class RideDao extends BaseDao {
 	}
 
 	// delete your ride which are not finished and which doesn't
+	public synchronized void updateOlderRides() {
+		Session session = null;
+		info("getMyRides enter");
+		try {
+			session = DBUtil.getSessionFactory().openSession();
+
+			Transaction transaction = session.beginTransaction();
+
+			String sql = "SELECT * FROM Ride WHERE Status in (:status1, :status2) and Created < :threshold";
+			SQLQuery query = session.createSQLQuery(sql);
+			query.addEntity(Ride.class);
+			query.setParameter("status1", CommonLib.RIDE_STATUS_ACCEPTED);
+			query.setParameter("status2", CommonLib.RIDE_STATUS_CREATED);
+			query.setParameter("threshold", System.currentTimeMillis() - CommonLib.THRESHOLD_DELETION);
+
+			java.util.List results = (java.util.List) query.list();
+
+			for (Iterator iterator = ((java.util.List) results).iterator(); iterator.hasNext();) {
+				Ride currentRide = (Ride) (iterator.next());
+				currentRide.setStatus(CommonLib.RIDE_STATUS_EXPIRED);
+				session.update(currentRide);
+			}
+
+			transaction.commit();
+			session.close();
+
+		} catch (HibernateException e) {
+			try {
+				throw new ZException("Error", e);
+			} catch (ZException e1) {
+				e1.printStackTrace();
+			}
+			error("Hibernate exception: " + e.getMessage());
+		} finally {
+			if (session != null && session.isOpen())
+				session.close();
+		}
+		info("getMyRides exit");
+	}
 
 }

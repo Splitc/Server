@@ -20,7 +20,7 @@
 		<property column="UserId" name="userId" type="java.lang.Integer" />
 		<property column="Created" name="created" type="java.lang.Long" />
 		<property column="RequiredPersons" name="requiredPersons" type="java.lang.Integer" />
-		<property column="Status" name="status" type="java.lang.String" />
+		<property column="Status" name="status" type="java.lang.Integer" />
 		
 		<property column="description" name="description" type="java.lang.String" />
 	</class>

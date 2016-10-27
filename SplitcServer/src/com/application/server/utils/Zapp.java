@@ -2,13 +2,12 @@ package com.application.server.utils;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import com.application.server.controller.UserDao;
+import com.application.server.controller.RideDao;
 
 public class Zapp implements ServletContextListener {
 
@@ -33,16 +32,15 @@ public class Zapp implements ServletContextListener {
 
 		archiveOtpService.scheduleAtFixedRate(new Runnable() {
 			public void run() {
-				zappObject.phoneVerification();
-				// zappObject.oauthVerification();
+				zappObject.updateRideStatus();
 			}
-		}, 0, 3, TimeUnit.MINUTES);
+		}, 0, 1, TimeUnit.HOURS);
 
 	}
 
-	private void phoneVerification() {
-		UserDao userDao = new UserDao();
-		userDao.userActive("");
+	private void updateRideStatus() {
+		RideDao rideDao = new RideDao();
+		rideDao.updateOlderRides();
 	}
 
 }

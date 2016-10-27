@@ -1,6 +1,5 @@
 package com.application.server.resource;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -40,7 +39,7 @@ public class RideResource extends BaseResource {
 			@FormParam("startLat") double startLat, @FormParam("startLon") double startLon,
 			@FormParam("startGooglePlaceId") String startGooglePlaceId, @FormParam("toAddress") String toAddress,
 			@FormParam("dropLat") double dropLat, @FormParam("dropLon") double dropLon,
-			@FormParam("dropGooglePlaceId") String dropGooglePlaceId, @FormParam("created") long created,
+			@FormParam("dropGooglePlaceId") String dropGooglePlaceId,
 			@FormParam("requiredPersons") int requiredPersons, @FormParam("description") String description) {
 
 		String clientCheck = super.clientCheck(clientId, appType);
@@ -55,7 +54,7 @@ public class RideResource extends BaseResource {
 		if (user != null && user.getUserId() > 0) {
 			Ride newRide = new Ride();
 			newRide.setFromAddress(fromAddress);
-			newRide.setCreated(created);
+			newRide.setCreated(System.currentTimeMillis());
 			newRide.setDescription(description);
 			newRide.setDropGooglePlaceId(dropGooglePlaceId);
 			newRide.setDropLat(dropLat);
@@ -67,6 +66,7 @@ public class RideResource extends BaseResource {
 			newRide.setStartLon(startLon);
 			newRide.setStatus(CommonLib.RIDE_STATUS_CREATED);
 			newRide.setToAddress(toAddress);
+			newRide.setUserId(user.getUserId());
 
 			RideDao rideDao = new RideDao();
 			newRide = rideDao.addRide(newRide);
@@ -116,7 +116,7 @@ public class RideResource extends BaseResource {
 					JSONObject wishJson = JsonUtil.getRideJson(wish);
 					jsonArr.put(wishJson);
 				}
-				returnObject.put("wishes", jsonArr);
+				returnObject.put("rides", jsonArr);
 				returnObject.put("total", size);
 			} catch (JSONException e) {
 

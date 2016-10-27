@@ -65,6 +65,8 @@ public class CommonLib {
 	public static final int RIDE_STATUS_EXPIRED = 103;
 	public static final int RIDE_STATUS_CANCELLED = 104;
 	
+	public static final int THRESHOLD_DELETION = 1000 * 60 * 60 * 2;
+	
 	public static final int DEAL_TYPE_1 = 1;
 	public static final int DEAL_TYPE_2 = 2;
 	public static final int DEAL_TYPE_3 = 3;

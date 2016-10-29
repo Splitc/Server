@@ -46,8 +46,7 @@ public class UserSession extends BaseResource {
 			@FormParam("user_name") String userName, @FormParam("email") String email, @FormParam("phone") String phone,
 			@FormParam("bio") String bio, @FormParam("registration_id") String regId,
 			@FormParam("latitude") double latitude, @FormParam("longitude") double longitude,
-			@FormParam("fbid") String fbId,
-			@FormParam("fbdata") String fbData, @FormParam("fb_token") String fbToken,
+			@FormParam("fbid") String fbId, @FormParam("fbdata") String fbData, @FormParam("fb_token") String fbToken,
 			@FormParam("fb_permission") String fb_permissions, @Context HttpServletRequest requestContext
 
 	) {
@@ -134,8 +133,7 @@ public class UserSession extends BaseResource {
 		Location location = new Location(latitude, longitude);
 		UserSessionDao userSessionDao = new UserSessionDao();
 		// Generate Access Token
-		Object[] tokens = userSessionDao.generateAccessToken(user.getUserName(), user.getUserId(), "", regId,
-				location);
+		Object[] tokens = userSessionDao.generateAccessToken(user.getUserName(), user.getUserId(), "", regId, location);
 		String accessToken = (String) tokens[0];
 		boolean exists = (Boolean) tokens[1];
 
@@ -176,18 +174,18 @@ public class UserSession extends BaseResource {
 	 */
 	@Path("/logout")
 	@POST
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces("application/json")
 	@Consumes("application/x-www-form-urlencoded")
-	public String userLogout(@FormParam("access_token") String accessToken, @FormParam("client_id") String clientId,
+	public JSONObject userLogout(@FormParam("access_token") String accessToken, @FormParam("client_id") String clientId,
 			@FormParam("app_type") String appType) {
 
 		// null checks, invalid request
 		if (clientId == null || appType == null)
-			return "FAILURE";
+			CommonLib.getResponseString("failure", "invalid params", CommonLib.RESPONSE_INVALID_PARAMS);
 
 		String clientCheck = super.clientCheck(clientId, appType);
 		if (clientCheck != null && !clientCheck.equals("success"))
-			return "FAILURE";
+			CommonLib.getResponseString("failure", "invalid client", CommonLib.RESPONSE_INVALID_CLIENT_ID);
 
 		UserDao userDao = new UserDao();
 		User user = userDao.userActive(accessToken);
@@ -199,9 +197,9 @@ public class UserSession extends BaseResource {
 		}
 
 		if (accessToken != null && !returnValue)
-			return "FAILURE";
+			CommonLib.getResponseString("failure", "", CommonLib.RESPONSE_FAILURE);
 
-		return "SUCCESS";
+		return CommonLib.getResponseString("success", "", CommonLib.RESPONSE_SUCCESS);
 	}
 
 }

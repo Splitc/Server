@@ -18,6 +18,7 @@ public class Ride implements Serializable {
 
 	private int status;
 	private long created;
+	private long startTime;
 
 	private int requiredPersons;
 	private String description;
@@ -137,6 +138,14 @@ public class Ride implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public long getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
 	}
 	
 }

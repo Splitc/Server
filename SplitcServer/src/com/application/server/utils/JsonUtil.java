@@ -43,6 +43,7 @@ public class JsonUtil {
 		userJsonObject.put("status", ride.getStatus());
 
 		userJsonObject.put("created", ride.getCreated());
+		userJsonObject.put("startTime", ride.getStartTime());
 		userJsonObject.put("requiredPersons", ride.getRequiredPersons());
 		userJsonObject.put("description", ride.getDescription());
 

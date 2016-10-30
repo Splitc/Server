@@ -42,7 +42,7 @@ public class RideResource extends BaseResource {
 			@FormParam("startGooglePlaceId") String startGooglePlaceId, @FormParam("toAddress") String toAddress,
 			@FormParam("dropLat") double dropLat, @FormParam("dropLon") double dropLon,
 			@FormParam("dropGooglePlaceId") String dropGooglePlaceId, @FormParam("requiredPersons") int requiredPersons,
-			@FormParam("description") String description) {
+			@FormParam("description") String description, @FormParam("startTime") long startTime) {
 
 		String clientCheck = super.clientCheck(clientId, appType);
 		if (clientCheck != null && !clientCheck.equals("success"))
@@ -57,6 +57,7 @@ public class RideResource extends BaseResource {
 			Ride newRide = new Ride();
 			newRide.setFromAddress(fromAddress);
 			newRide.setCreated(System.currentTimeMillis());
+			newRide.setStartTime(startTime);
 			newRide.setDescription(description);
 			newRide.setDropGooglePlaceId(dropGooglePlaceId);
 			newRide.setDropLat(dropLat);

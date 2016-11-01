@@ -137,6 +137,57 @@ public class RideResource extends BaseResource {
 			return CommonLib.getResponseString("failure", "", CommonLib.RESPONSE_FAILURE);
 	}
 
+	@Path("/feed")
+	@POST
+	@Produces("application/json")
+	@Consumes("application/x-www-form-urlencoded")
+	public JSONObject getFeedRides(@FormParam("client_id") String clientId, @FormParam("app_type") String appType,
+			@FormParam("access_token") String accessToken, @QueryParam("start") int start,
+			@QueryParam("count") int count, @FormParam("startLatitude") double startLat,
+			@FormParam("startLongitude") double startLon, @FormParam("startGooglePlaceId") String startGooglePlaceId,
+			@FormParam("dropLatitude") double dropLat, @FormParam("dropLongitude") double dropLon,
+			@FormParam("dropGooglePlaceId") String dropGooglePlaceId) {
+
+		String clientCheck = super.clientCheck(clientId, appType);
+		if (clientCheck != null && !clientCheck.equals("success"))
+			return CommonLib.getResponseString("Invalid params", "", CommonLib.RESPONSE_INVALID_PARAMS);
+
+		UserDao userDao = new UserDao();
+
+		// access token validity
+		User user = userDao.userActive(accessToken);
+
+		if (user != null && user.getUserId() > 0) {
+			RideDao rideDao = new RideDao();
+			List<Ride> rides = rideDao.getFeedRides(user.getUserId(), startLat, startLon, startGooglePlaceId, dropLat,
+					dropLon, dropGooglePlaceId, start, count);
+			int size = rideDao.getFeedRidesCount(user.getUserId(), startLat, startLon, startGooglePlaceId, dropLat,
+					dropLon, dropGooglePlaceId);
+			JSONObject returnObject = new JSONObject();
+			try {
+				JSONArray jsonArr = new JSONArray();
+				for (Ride wish : rides) {
+					JSONObject wishJson = JsonUtil.getRideJson(wish);
+
+					JSONArray userArr = new JSONArray();
+					UserRideDao userRideDao = new UserRideDao();
+					List<User> acceptedUsers = userRideDao.getAcceptedUsers(wish.getRideId());
+					for (User acceptedUser : acceptedUsers) {
+						userArr.put(JsonUtil.getUserJson(acceptedUser));
+					}
+					wishJson.put("accepted_users", userArr);
+					jsonArr.put(wishJson);
+				}
+				returnObject.put("rides", jsonArr);
+				returnObject.put("total", size);
+			} catch (JSONException e) {
+
+			}
+			return CommonLib.getResponseString(returnObject, "success", CommonLib.RESPONSE_SUCCESS);
+		} else
+			return CommonLib.getResponseString("failure", "", CommonLib.RESPONSE_FAILURE);
+	}
+
 	// TODO: if action is already taken for the particular ride, then reject
 	// TODO: action for rating vs the new ride acceptance
 	// TODO: action for cancellation

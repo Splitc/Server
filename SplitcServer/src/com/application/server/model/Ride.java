@@ -21,6 +21,7 @@ public class Ride implements Serializable {
 	private long startTime;
 
 	private int requiredPersons;
+	private int currentRequiredPersons;
 	private String description;
 
 	private int userId; // wish posting user
@@ -146,6 +147,14 @@ public class Ride implements Serializable {
 
 	public void setStartTime(long startTime) {
 		this.startTime = startTime;
+	}
+
+	public int getCurrentRequiredPersons() {
+		return currentRequiredPersons;
+	}
+
+	public void setCurrentRequiredPersons(int currentRequiredPersons) {
+		this.currentRequiredPersons = currentRequiredPersons;
 	}
 	
 }

@@ -64,6 +64,7 @@ public class RideResource extends BaseResource {
 			newRide.setDropLon(dropLon);
 			newRide.setFromAddress(fromAddress);
 			newRide.setRequiredPersons(requiredPersons);
+			newRide.setCurrentRequiredPersons(requiredPersons);
 			newRide.setStartGooglePlaceId(startGooglePlaceId);
 			newRide.setStartLat(startLat);
 			newRide.setStartLon(startLon);
@@ -197,7 +198,7 @@ public class RideResource extends BaseResource {
 	@Produces("application/json")
 	@Consumes("application/x-www-form-urlencoded")
 	public JSONObject updateUserRide(@FormParam("client_id") String clientId, @FormParam("app_type") String appType,
-			@FormParam("access_token") String accessToken, @FormParam("action") int start,
+			@FormParam("access_token") String accessToken, @FormParam("action") int action,
 			@FormParam("rideId") int rideId, @FormParam("fromAddress") String fromAddress,
 			@FormParam("startLat") double startLat, @FormParam("startLon") double startLon,
 			@FormParam("startGooglePlaceId") String startGooglePlaceId, @FormParam("toAddress") String toAddress,
@@ -215,6 +216,16 @@ public class RideResource extends BaseResource {
 		User user = userDao.userActive(accessToken);
 
 		if (user != null && user.getUserId() > 0) {
+			RideDao rideDao = new RideDao();
+
+			Ride currentRide = rideDao.getRide(rideId);
+
+			int currentPersons = currentRide.getCurrentRequiredPersons();
+			if (currentPersons < 1) {
+				return CommonLib.getResponseString("failure", "already has succicient persons",
+						CommonLib.RESPONSE_FAILURE);
+			}
+
 			UserRideDao userRideDao = new UserRideDao();
 
 			UserRide userRide = new UserRide();
@@ -230,10 +241,20 @@ public class RideResource extends BaseResource {
 			userRide.setStartLat(startLat);
 			userRide.setTravellerId(user.getUserId());
 			userRide.setToAddress(toAddress);
-			// userRide.setStatus(status);
 			userRide.setStartLon(startLon);
-			// userRide.setUserId(userId);
+			userRide.setUserId(currentRide.getUserId());
+
+			if (currentPersons < 2)
+				userRide.setStatus(CommonLib.RIDE_STATUS_FULFILLED);
+			else
+				userRide.setStatus(CommonLib.RIDE_STATUS_ACCEPTED);
+
 			userRide = userRideDao.addRide(userRide);
+
+			if (userRide != null) {
+				currentRide.setCurrentRequiredPersons(currentPersons - 1);
+				rideDao.updateRide(currentRide);
+			}
 			return CommonLib.getResponseString(userRide, "success", CommonLib.RESPONSE_SUCCESS);
 		} else
 			return CommonLib.getResponseString("failure", "", CommonLib.RESPONSE_FAILURE);

@@ -178,8 +178,8 @@ public class RideDao extends BaseDao {
 	}
 
 	// view active rides nearby count
-	public int getFeedRidesCount(int userId, double startLatitude, double startLongitude, String startGooglePlaceId, double endLatitude,
-			double endLongitude, String dropGooglePlaceId) {
+	public int getFeedRidesCount(int userId, double startLatitude, double startLongitude, String startGooglePlaceId,
+			double endLatitude, double endLongitude, String dropGooglePlaceId) {
 		int size = 0;
 		Session session = null;
 		try {
@@ -242,6 +242,68 @@ public class RideDao extends BaseDao {
 				currentRide.setStatus(CommonLib.RIDE_STATUS_EXPIRED);
 				session.update(currentRide);
 			}
+
+			transaction.commit();
+			session.close();
+
+		} catch (HibernateException e) {
+			try {
+				throw new ZException("Error", e);
+			} catch (ZException e1) {
+				e1.printStackTrace();
+			}
+			error("Hibernate exception: " + e.getMessage());
+		} finally {
+			if (session != null && session.isOpen())
+				session.close();
+		}
+		info("getMyRides exit");
+	}
+
+	public Ride getRide(int rideId) {
+		Ride currentRide = null;
+		Session session = null;
+		info("getMyRides enter");
+		try {
+			session = DBUtil.getSessionFactory().openSession();
+
+			Transaction transaction = session.beginTransaction();
+
+			String sql = "SELECT * FROM Ride WHERE RideId = :rideId";
+			SQLQuery query = session.createSQLQuery(sql);
+			query.addEntity(Ride.class);
+			query.setParameter("rideId", rideId);
+			java.util.List results = (java.util.List) query.list();
+
+			if(results != null && results.size() > 0)
+				currentRide = (Ride) (results.get(0));
+
+			transaction.commit();
+			session.close();
+
+		} catch (HibernateException e) {
+			try {
+				throw new ZException("Error", e);
+			} catch (ZException e1) {
+				e1.printStackTrace();
+			}
+			error("Hibernate exception: " + e.getMessage());
+		} finally {
+			if (session != null && session.isOpen())
+				session.close();
+		}
+		info("getMyRides exit");
+		return currentRide;
+	}
+	
+	public void updateRide(Ride ride) {
+		Session session = null;
+		info("getMyRides enter");
+		try {
+			session = DBUtil.getSessionFactory().openSession();
+
+			Transaction transaction = session.beginTransaction();
+			session.update(ride);
 
 			transaction.commit();
 			session.close();

@@ -21,6 +21,7 @@
 		<property column="StartTime" name="startTime" type="java.lang.Long" />
 		<property column="Created" name="created" type="java.lang.Long" />
 		<property column="RequiredPersons" name="requiredPersons" type="java.lang.Integer" />
+		<property column="CurrentRequiredPersons" name="currentRequiredPersons" type="java.lang.Integer" />
 		<property column="Status" name="status" type="java.lang.Integer" />
 		
 		<property column="description" name="description" type="java.lang.String" />

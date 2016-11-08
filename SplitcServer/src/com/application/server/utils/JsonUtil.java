@@ -23,8 +23,8 @@ public class JsonUtil {
 		userJsonObject.put("fbId", user.getFacebookId());
 		userJsonObject.put("contact", user.getPhone());
 		userJsonObject.put("user_name", CommonLib.getUserName(user));
-		userJson.put("user", userJsonObject);
-		return userJson;
+		
+		return userJsonObject;
 	}
 
 	public static JSONObject getRideJson(Ride ride) throws JSONException {
@@ -41,6 +41,7 @@ public class JsonUtil {
 		userJsonObject.put("dropLon", ride.getDropLon());
 		userJsonObject.put("dropGooglePlaceId", ride.getDropGooglePlaceId());
 		userJsonObject.put("status", ride.getStatus());
+		userJsonObject.put("rideId", ride.getRideId());
 
 		userJsonObject.put("created", ride.getCreated());
 		userJsonObject.put("startTime", ride.getStartTime());

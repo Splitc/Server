@@ -126,6 +126,7 @@ public class RideResource extends BaseResource {
 						userArr.put(JsonUtil.getUserJson(acceptedUser));
 					}
 					wishJson.put("accepted_users", userArr);
+					wishJson.put("user", JsonUtil.getUserJson(user));
 					jsonArr.put(wishJson);
 				}
 				returnObject.put("rides", jsonArr);
@@ -177,6 +178,7 @@ public class RideResource extends BaseResource {
 						userArr.put(JsonUtil.getUserJson(acceptedUser));
 					}
 					wishJson.put("accepted_users", userArr);
+					wishJson.put("user", JsonUtil.getUserJson(user));
 					jsonArr.put(wishJson);
 				}
 				returnObject.put("rides", jsonArr);

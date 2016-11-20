@@ -15,7 +15,6 @@ import org.codehaus.jettison.json.JSONObject;
 
 import com.application.server.controller.FeedDao;
 import com.application.server.controller.UserDao;
-import com.application.server.controller.UserRideDao;
 import com.application.server.model.User;
 import com.application.server.model.pojo.Feed;
 import com.application.server.utils.CommonLib;
@@ -74,17 +73,10 @@ public class FeedResource extends BaseResource {
 				JSONArray ridesArr = new JSONArray();
 				for (Feed wish : feedItems) {
 					JSONObject wishJson = JsonUtil.getFeedJson(wish);
-					JSONArray userArr = new JSONArray();
-					UserRideDao userRideDao = new UserRideDao();
-					List<User> acceptedUsers = userRideDao.getRidePeople(wish.getFeedId());
-					for (User acceptedUser : acceptedUsers) {
-						userArr.put(JsonUtil.getUserJson(acceptedUser));
-					}
-					wishJson.put("accepted_users", userArr);
 					wishJson.put("user", JsonUtil.getUserJson(user));
 					ridesArr.put(wishJson);
 				}
-				returnObject.put("rides", ridesArr);
+				returnObject.put("feedItems", ridesArr);
 				returnObject.put("total", size);
 			} catch (JSONException e) {
 

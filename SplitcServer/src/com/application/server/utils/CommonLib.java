@@ -755,7 +755,7 @@ public class CommonLib {
 		feed.setStatus(ride.getStatus());
 		feed.setToAddress(ride.getToAddress());
 		feed.setUserId(ride.getUserId());
-		feed.setFeedType(FeedResource.FILTER_SHOW_RIDES);
+		feed.setFeedType(CommonLib.FEED_TYPE_RIDE);
 		
 		return feed;
 	}
@@ -780,7 +780,7 @@ public class CommonLib {
 		feed.setStatus(ride.getStatus());
 		feed.setToAddress(ride.getToAddress());
 		feed.setUserId(ride.getUserId());
-		feed.setFeedType(FeedResource.FILTER_SHOW_RIDE_REQUESTS);
+		feed.setFeedType(CommonLib.FEED_TYPE_RIDE_REQUEST);
 		
 		return feed;
 	}

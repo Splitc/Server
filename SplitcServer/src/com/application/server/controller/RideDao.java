@@ -8,14 +8,11 @@ import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.omg.CORBA.COMM_FAILURE;
 
 import com.application.server.model.Ride;
 import com.application.server.utils.CommonLib;
 import com.application.server.utils.DBUtil;
 import com.application.server.utils.exception.ZException;
-
-import gnu.io.CommPortOwnershipListener;
 
 public class RideDao extends BaseDao {
 

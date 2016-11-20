@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.application.server.model.RideRequest" table="RideRequest">
+
+		<id column="RideRequestId" name="rideRequestId" type="java.lang.Integer">
+			<generator class="native" />
+		</id>
+		<property column="FromAddress" name="fromAddress" type="java.lang.String" />
+		<property column="StartLat" name="startLat" type="java.lang.Double" />
+		<property column="StartLon" name="startLon" type="java.lang.Double" />
+		<property column="startGooglePlaceId" name="startGooglePlaceId" type="java.lang.String" />
+		
+		<property column="ToAddress" name="toAddress" type="java.lang.String" />
+		<property column="DropLat" name="dropLat" type="java.lang.Double" />
+		<property column="DropLon" name="dropLon" type="java.lang.Double" />
+		<property column="dropGooglePlaceId" name="dropGooglePlaceId" type="java.lang.String" />
+		
+		<property column="UserId" name="userId" type="java.lang.Integer" />
+		<property column="StartTime" name="startTime" type="java.lang.Long" />
+		<property column="Created" name="created" type="java.lang.Long" />
+		<property column="Persons" name="persons" type="java.lang.Integer" />
+		<property column="Status" name="status" type="java.lang.Integer" />
+		
+		<property column="description" name="description" type="java.lang.String" />
+	</class>
+</hibernate-mapping>

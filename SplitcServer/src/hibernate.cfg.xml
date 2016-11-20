@@ -20,6 +20,7 @@
 		<mapping resource="com/application/server/model/user.hbm.xml" />
 		<mapping resource="com/application/server/model/ride.hbm.xml" />
 		<mapping resource="com/application/server/model/userride.hbm.xml" />
+		<mapping resource="com/application/server/model/riderequest.hbm.xml" />
 
 	</session-factory>
 </hibernate-configuration>

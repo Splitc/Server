@@ -4,6 +4,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.application.server.model.Ride;
+import com.application.server.model.RideRequest;
 import com.application.server.model.User;
 
 public class JsonUtil {
@@ -46,6 +47,32 @@ public class JsonUtil {
 		userJsonObject.put("created", ride.getCreated());
 		userJsonObject.put("startTime", ride.getStartTime());
 		userJsonObject.put("requiredPersons", ride.getRequiredPersons());
+		userJsonObject.put("description", ride.getDescription());
+
+		userJsonObject.put("userId", ride.getUserId());
+
+		return userJsonObject;
+	}
+	
+	public static JSONObject getRideRequestJson(RideRequest ride) throws JSONException {
+		if (ride == null)
+			return null;
+		JSONObject userJsonObject = new JSONObject();
+
+		userJsonObject.put("fromAddress", ride.getFromAddress());
+		userJsonObject.put("startLat", ride.getStartLat() + "");
+		userJsonObject.put("startLon", ride.getStartLon());
+		userJsonObject.put("startGooglePlaceId", ride.getStartGooglePlaceId());
+		userJsonObject.put("toAddress", ride.getToAddress());
+		userJsonObject.put("dropLat", ride.getDropLat());
+		userJsonObject.put("dropLon", ride.getDropLon());
+		userJsonObject.put("dropGooglePlaceId", ride.getDropGooglePlaceId());
+		userJsonObject.put("status", ride.getStatus());
+		userJsonObject.put("rideRequestId", ride.getRideRequestId());
+
+		userJsonObject.put("created", ride.getCreated());
+		userJsonObject.put("startTime", ride.getStartTime());
+		userJsonObject.put("requiredPersons", ride.getPersons());
 		userJsonObject.put("description", ride.getDescription());
 
 		userJsonObject.put("userId", ride.getUserId());

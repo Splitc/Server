@@ -13,23 +13,21 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
-import com.application.server.controller.RideDao;
+import com.application.server.controller.RideRequestDao;
 import com.application.server.controller.UserDao;
 import com.application.server.controller.UserRideDao;
-import com.application.server.model.Ride;
+import com.application.server.model.RideRequest;
 import com.application.server.model.User;
-import com.application.server.model.UserRide;
 import com.application.server.utils.CommonLib;
 import com.application.server.utils.JsonUtil;
 import com.application.server.utils.exception.ZException;
 
-@Path("/ride")
-public class RideResource extends BaseResource {
+public class RideRequestResource extends BaseResource {
 
-	public static final String LOGGER = "RideResource.class";
+	public static final String LOGGER = "RideRequestResource.class";
 
-	public RideResource() {
-		super(RideResource.LOGGER);
+	public RideRequestResource() {
+		super(RideRequestResource.LOGGER);
 	}
 
 	@Path("/add")
@@ -41,7 +39,7 @@ public class RideResource extends BaseResource {
 			@FormParam("startLat") double startLat, @FormParam("startLon") double startLon,
 			@FormParam("startGooglePlaceId") String startGooglePlaceId, @FormParam("toAddress") String toAddress,
 			@FormParam("dropLat") double dropLat, @FormParam("dropLon") double dropLon,
-			@FormParam("dropGooglePlaceId") String dropGooglePlaceId, @FormParam("requiredPersons") int requiredPersons,
+			@FormParam("dropGooglePlaceId") String dropGooglePlaceId, @FormParam("persons") int persons,
 			@FormParam("description") String description, @FormParam("startTime") long startTime) {
 
 		String clientCheck = super.clientCheck(clientId, appType);
@@ -54,7 +52,7 @@ public class RideResource extends BaseResource {
 		User user = userDao.userActive(accessToken);
 
 		if (user != null && user.getUserId() > 0) {
-			Ride newRide = new Ride();
+			RideRequest newRide = new RideRequest();
 			newRide.setFromAddress(fromAddress);
 			newRide.setCreated(System.currentTimeMillis());
 			newRide.setStartTime(startTime);
@@ -63,8 +61,7 @@ public class RideResource extends BaseResource {
 			newRide.setDropLat(dropLat);
 			newRide.setDropLon(dropLon);
 			newRide.setFromAddress(fromAddress);
-			newRide.setRequiredPersons(requiredPersons);
-			newRide.setCurrentRequiredPersons(requiredPersons);
+			newRide.setPersons(persons);
 			newRide.setStartGooglePlaceId(startGooglePlaceId);
 			newRide.setStartLat(startLat);
 			newRide.setStartLon(startLon);
@@ -72,11 +69,11 @@ public class RideResource extends BaseResource {
 			newRide.setToAddress(toAddress);
 			newRide.setUserId(user.getUserId());
 
-			RideDao rideDao = new RideDao();
-			newRide = rideDao.addRide(newRide);
-			if (newRide != null && newRide.getRideId() > 0) {
+			RideRequestDao rideDao = new RideRequestDao();
+			newRide = rideDao.addRideRequest(newRide);
+			if (newRide != null && newRide.getRideRequestId() > 0) {
 				try {
-					return CommonLib.getResponseString(JsonUtil.getRideJson(newRide), "Invalid user",
+					return CommonLib.getResponseString(JsonUtil.getRideRequestJson(newRide), "Invalid user",
 							CommonLib.RESPONSE_SUCCESS);
 				} catch (JSONException e) {
 					try {
@@ -110,22 +107,22 @@ public class RideResource extends BaseResource {
 		User user = userDao.userActive(accessToken);
 
 		if (user != null && user.getUserId() > 0) {
-			RideDao rideDao = new RideDao();
-			List<Ride> rides = rideDao.getMyRides(user.getUserId(), start, count);
+			RideRequestDao rideDao = new RideRequestDao();
+			List<RideRequest> rides = rideDao.getMyRides(user.getUserId(), start, count);
 			int size = rideDao.getMyRidesCount(user.getUserId());
 			JSONObject returnObject = new JSONObject();
 			try {
 				JSONArray jsonArr = new JSONArray();
-				for (Ride wish : rides) {
-					JSONObject wishJson = JsonUtil.getRideJson(wish);
+				for (RideRequest wish : rides) {
+					JSONObject wishJson = JsonUtil.getRideRequestJson(wish);
 
 					JSONArray userArr = new JSONArray();
 					UserRideDao userRideDao = new UserRideDao();
-					List<User> acceptedUsers = userRideDao.getRidePeople(wish.getRideId());
+					List<User> acceptedUsers = userRideDao.getRidePeople(wish.getRideRequestId());
 					for (User acceptedUser : acceptedUsers) {
 						userArr.put(JsonUtil.getUserJson(acceptedUser));
 					}
-					wishJson.put("accepted_users", userArr);
+					wishJson.put("users", userArr);
 					wishJson.put("user", JsonUtil.getUserJson(user));
 					jsonArr.put(wishJson);
 				}
@@ -138,5 +135,4 @@ public class RideResource extends BaseResource {
 		} else
 			return CommonLib.getResponseString("failure", "", CommonLib.RESPONSE_FAILURE);
 	}
-
 }

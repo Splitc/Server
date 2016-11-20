@@ -52,7 +52,7 @@ public class UserRideDao extends BaseDao {
 	}
 
 	// get the accepted users for a ride
-	public ArrayList<User> getAcceptedUsers(int rideId) {
+	public ArrayList<User> getRidePeople(int rideId) {
 		ArrayList<User> rides = new ArrayList<User>();
 		Session session = null;
 		info("getMyRides enter");

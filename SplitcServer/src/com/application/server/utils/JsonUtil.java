@@ -6,6 +6,7 @@ import org.codehaus.jettison.json.JSONObject;
 import com.application.server.model.Ride;
 import com.application.server.model.RideRequest;
 import com.application.server.model.User;
+import com.application.server.model.pojo.Feed;
 
 public class JsonUtil {
 
@@ -76,6 +77,33 @@ public class JsonUtil {
 		userJsonObject.put("description", ride.getDescription());
 
 		userJsonObject.put("userId", ride.getUserId());
+
+		return userJsonObject;
+	}
+	
+	public static JSONObject getFeedJson(Feed feedItem) throws JSONException {
+		if (feedItem == null)
+			return null;
+		JSONObject userJsonObject = new JSONObject();
+
+		userJsonObject.put("fromAddress", feedItem.getFromAddress());
+		userJsonObject.put("startLat", feedItem.getStartLat() + "");
+		userJsonObject.put("startLon", feedItem.getStartLon());
+		userJsonObject.put("startGooglePlaceId", feedItem.getStartGooglePlaceId());
+		userJsonObject.put("toAddress", feedItem.getToAddress());
+		userJsonObject.put("dropLat", feedItem.getDropLat());
+		userJsonObject.put("dropLon", feedItem.getDropLon());
+		userJsonObject.put("dropGooglePlaceId", feedItem.getDropGooglePlaceId());
+		userJsonObject.put("status", feedItem.getStatus());
+		userJsonObject.put("rideId", feedItem.getFeedId());
+		userJsonObject.put("type", feedItem.getFeedType());
+
+		userJsonObject.put("created", feedItem.getCreated());
+		userJsonObject.put("startTime", feedItem.getStartTime());
+		userJsonObject.put("requiredPersons", feedItem.getRequiredPersons());
+		userJsonObject.put("description", feedItem.getDescription());
+
+		userJsonObject.put("userId", feedItem.getUserId());
 
 		return userJsonObject;
 	}

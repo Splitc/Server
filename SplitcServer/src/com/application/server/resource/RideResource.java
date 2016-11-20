@@ -18,7 +18,6 @@ import com.application.server.controller.UserDao;
 import com.application.server.controller.UserRideDao;
 import com.application.server.model.Ride;
 import com.application.server.model.User;
-import com.application.server.model.UserRide;
 import com.application.server.utils.CommonLib;
 import com.application.server.utils.JsonUtil;
 import com.application.server.utils.exception.ZException;
@@ -41,7 +40,7 @@ public class RideResource extends BaseResource {
 			@FormParam("startLat") double startLat, @FormParam("startLon") double startLon,
 			@FormParam("startGooglePlaceId") String startGooglePlaceId, @FormParam("toAddress") String toAddress,
 			@FormParam("dropLat") double dropLat, @FormParam("dropLon") double dropLon,
-			@FormParam("dropGooglePlaceId") String dropGooglePlaceId, @FormParam("requiredPersons") int requiredPersons,
+			@FormParam("dropGooglePlaceId") String dropGooglePlaceId, @FormParam("persons") int requiredPersons,
 			@FormParam("description") String description, @FormParam("startTime") long startTime) {
 
 		String clientCheck = super.clientCheck(clientId, appType);
@@ -64,7 +63,6 @@ public class RideResource extends BaseResource {
 			newRide.setDropLon(dropLon);
 			newRide.setFromAddress(fromAddress);
 			newRide.setRequiredPersons(requiredPersons);
-			newRide.setCurrentRequiredPersons(requiredPersons);
 			newRide.setStartGooglePlaceId(startGooglePlaceId);
 			newRide.setStartLat(startLat);
 			newRide.setStartLon(startLon);

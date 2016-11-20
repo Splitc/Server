@@ -1,10 +1,11 @@
-package com.application.server.model;
+package com.application.server.model.pojo;
 
 import java.io.Serializable;
 
-public class Ride implements Serializable {
+public class Feed implements Serializable{
 
-	private int rideId;
+	private int feedId;
+	private int feedType; // FEED_TYPE_RIDE, FEED_TYPE_RIDE_REQUEST
 
 	private String fromAddress;
 	private double startLat;
@@ -24,16 +25,23 @@ public class Ride implements Serializable {
 	private String description;
 
 	private int userId; // wish posting user
+	
+	public Feed(){}
 
-	public Ride() {
+	public int getFeedId() {
+		return feedId;
 	}
 
-	public int getRideId() {
-		return rideId;
+	public void setFeedId(int feedId) {
+		this.feedId = feedId;
+	}
+	
+	public int getFeedType() {
+		return feedType;
 	}
 
-	public void setRideId(int rideId) {
-		this.rideId = rideId;
+	public void setFeedType(int feedType) {
+		this.feedType = feedType;
 	}
 
 	public String getFromAddress() {
@@ -60,6 +68,14 @@ public class Ride implements Serializable {
 		this.startLon = startLon;
 	}
 
+	public String getStartGooglePlaceId() {
+		return startGooglePlaceId;
+	}
+
+	public void setStartGooglePlaceId(String startGooglePlaceId) {
+		this.startGooglePlaceId = startGooglePlaceId;
+	}
+
 	public String getToAddress() {
 		return toAddress;
 	}
@@ -84,28 +100,12 @@ public class Ride implements Serializable {
 		this.dropLon = dropLon;
 	}
 
-	public int getUserId() {
-		return userId;
+	public String getDropGooglePlaceId() {
+		return dropGooglePlaceId;
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
-
-	public long getCreated() {
-		return created;
-	}
-
-	public void setCreated(long created) {
-		this.created = created;
-	}
-
-	public int getRequiredPersons() {
-		return requiredPersons;
-	}
-
-	public void setRequiredPersons(int requiredPersons) {
-		this.requiredPersons = requiredPersons;
+	public void setDropGooglePlaceId(String dropGooglePlaceId) {
+		this.dropGooglePlaceId = dropGooglePlaceId;
 	}
 
 	public int getStatus() {
@@ -116,28 +116,12 @@ public class Ride implements Serializable {
 		this.status = status;
 	}
 
-	public String getStartGooglePlaceId() {
-		return startGooglePlaceId;
+	public long getCreated() {
+		return created;
 	}
 
-	public void setStartGooglePlaceId(String startGooglePlaceId) {
-		this.startGooglePlaceId = startGooglePlaceId;
-	}
-
-	public String getDropGooglePlaceId() {
-		return dropGooglePlaceId;
-	}
-
-	public void setDropGooglePlaceId(String dropGooglePlaceId) {
-		this.dropGooglePlaceId = dropGooglePlaceId;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
+	public void setCreated(long created) {
+		this.created = created;
 	}
 
 	public long getStartTime() {
@@ -148,4 +132,28 @@ public class Ride implements Serializable {
 		this.startTime = startTime;
 	}
 
+	public int getRequiredPersons() {
+		return requiredPersons;
+	}
+
+	public void setRequiredPersons(int requiredPersons) {
+		this.requiredPersons = requiredPersons;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+	
 }

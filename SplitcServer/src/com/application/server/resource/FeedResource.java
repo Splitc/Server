@@ -13,24 +13,27 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
-import com.application.server.controller.RideDao;
+import com.application.server.controller.FeedDao;
 import com.application.server.controller.UserDao;
 import com.application.server.controller.UserRideDao;
-import com.application.server.model.Ride;
 import com.application.server.model.User;
-import com.application.server.model.UserRide;
+import com.application.server.model.pojo.Feed;
 import com.application.server.utils.CommonLib;
 import com.application.server.utils.JsonUtil;
 
+@Path("/feed")
 public class FeedResource extends BaseResource {
 
 	public static final String LOGGER = "FeedResource.class";
+	public static final int FILTER_SHOW_RIDES = 2;
+	public static final int FILTER_SHOW_RIDE_REQUESTS = 1;
+	public static final int FILTER_SHOW_ALL = 0;
 
 	public FeedResource() {
 		super(FeedResource.LOGGER);
 	}
 
-	@Path("/feed")
+	@Path("/fetch")
 	@POST
 	@Produces("application/json")
 	@Consumes("application/x-www-form-urlencoded")
@@ -39,7 +42,8 @@ public class FeedResource extends BaseResource {
 			@QueryParam("count") int count, @FormParam("startLatitude") double startLat,
 			@FormParam("startLongitude") double startLon, @FormParam("startGooglePlaceId") String startGooglePlaceId,
 			@FormParam("dropLatitude") double dropLat, @FormParam("dropLongitude") double dropLon,
-			@FormParam("dropGooglePlaceId") String dropGooglePlaceId) {
+			@FormParam("dropGooglePlaceId") String dropGooglePlaceId,
+			@FormParam("filter_options") String filterOptions) {
 
 		String clientCheck = super.clientCheck(clientId, appType);
 		if (clientCheck != null && !clientCheck.equals("success"))
@@ -51,28 +55,36 @@ public class FeedResource extends BaseResource {
 		User user = userDao.userActive(accessToken);
 
 		if (user != null && user.getUserId() > 0) {
-			RideDao rideDao = new RideDao();
-			List<Ride> rides = rideDao.getFeedRides(user.getUserId(), startLat, startLon, startGooglePlaceId, dropLat,
-					dropLon, dropGooglePlaceId, start, count);
-			int size = rideDao.getFeedRidesCount(user.getUserId(), startLat, startLon, startGooglePlaceId, dropLat,
-					dropLon, dropGooglePlaceId);
+
+			int filter = FILTER_SHOW_ALL;
+			if (filterOptions != null && !filterOptions.isEmpty()) {
+				filter = filterOptions.equalsIgnoreCase("ride") ? FILTER_SHOW_RIDES
+						: filterOptions.equalsIgnoreCase("rideRequest") ? FILTER_SHOW_RIDE_REQUESTS : FILTER_SHOW_ALL;
+			}
+
+			FeedDao feedDao = new FeedDao();
+			List<Feed> feedItems = feedDao.getFeedRides(user.getUserId(), startLat, startLon, startGooglePlaceId,
+					dropLat, dropLon, dropGooglePlaceId, start, count, filter);
+
+			int size = feedDao.getFeedRidesCount(user.getUserId(), startLat, startLon, startGooglePlaceId, dropLat,
+					dropLon, dropGooglePlaceId, filter);
+
 			JSONObject returnObject = new JSONObject();
 			try {
-				JSONArray jsonArr = new JSONArray();
-				for (Ride wish : rides) {
-					JSONObject wishJson = JsonUtil.getRideJson(wish);
-
+				JSONArray ridesArr = new JSONArray();
+				for (Feed wish : feedItems) {
+					JSONObject wishJson = JsonUtil.getFeedJson(wish);
 					JSONArray userArr = new JSONArray();
 					UserRideDao userRideDao = new UserRideDao();
-					List<User> acceptedUsers = userRideDao.getRidePeople(wish.getRideId());
+					List<User> acceptedUsers = userRideDao.getRidePeople(wish.getFeedId());
 					for (User acceptedUser : acceptedUsers) {
 						userArr.put(JsonUtil.getUserJson(acceptedUser));
 					}
 					wishJson.put("accepted_users", userArr);
 					wishJson.put("user", JsonUtil.getUserJson(user));
-					jsonArr.put(wishJson);
+					ridesArr.put(wishJson);
 				}
-				returnObject.put("rides", jsonArr);
+				returnObject.put("rides", ridesArr);
 				returnObject.put("total", size);
 			} catch (JSONException e) {
 
@@ -82,75 +94,4 @@ public class FeedResource extends BaseResource {
 			return CommonLib.getResponseString("failure", "", CommonLib.RESPONSE_FAILURE);
 	}
 
-	// No need for the action
-	// TODO: if action is already taken for the particular ride, then reject
-	// TODO: action for rating vs the new ride acceptance
-	// TODO: action for cancellation
-	// TODO: check for add vs update
-	@Path("/action")
-	@POST
-	@Produces("application/json")
-	@Consumes("application/x-www-form-urlencoded")
-	public JSONObject updateUserRide(@FormParam("client_id") String clientId, @FormParam("app_type") String appType,
-			@FormParam("access_token") String accessToken, @FormParam("action") int action,
-			@FormParam("rideId") int rideId, @FormParam("fromAddress") String fromAddress,
-			@FormParam("startLat") double startLat, @FormParam("startLon") double startLon,
-			@FormParam("startGooglePlaceId") String startGooglePlaceId, @FormParam("toAddress") String toAddress,
-			@FormParam("dropLat") double dropLat, @FormParam("dropLon") double dropLon,
-			@FormParam("dropGooglePlaceId") String dropGooglePlaceId, @FormParam("description") String description,
-			@FormParam("rating") float rating) {
-
-		String clientCheck = super.clientCheck(clientId, appType);
-		if (clientCheck != null && !clientCheck.equals("success"))
-			return CommonLib.getResponseString("Invalid params", "", CommonLib.RESPONSE_INVALID_PARAMS);
-
-		UserDao userDao = new UserDao();
-
-		// access token validity
-		User user = userDao.userActive(accessToken);
-
-		if (user != null && user.getUserId() > 0) {
-			RideDao rideDao = new RideDao();
-
-			Ride currentRide = rideDao.getRide(rideId);
-
-			int currentPersons = currentRide.getCurrentRequiredPersons();
-			if (currentPersons < 1) {
-				return CommonLib.getResponseString("failure", "already has succicient persons",
-						CommonLib.RESPONSE_FAILURE);
-			}
-
-			UserRideDao userRideDao = new UserRideDao();
-
-			UserRide userRide = new UserRide();
-			userRide.setCreated(System.currentTimeMillis());
-			userRide.setDescription(description);
-			userRide.setDropGooglePlaceId(dropGooglePlaceId);
-			userRide.setDropLat(dropLat);
-			userRide.setDropLon(dropLon);
-			userRide.setFromAddress(fromAddress);
-			userRide.setRating(rating);
-			userRide.setRideId(rideId);
-			userRide.setStartGooglePlaceId(startGooglePlaceId);
-			userRide.setStartLat(startLat);
-			userRide.setTravellerId(user.getUserId());
-			userRide.setToAddress(toAddress);
-			userRide.setStartLon(startLon);
-			userRide.setUserId(currentRide.getUserId());
-
-			if (currentPersons < 2)
-				userRide.setStatus(CommonLib.RIDE_STATUS_FULFILLED);
-			else
-				userRide.setStatus(CommonLib.RIDE_STATUS_ACCEPTED);
-
-			userRide = userRideDao.addRide(userRide);
-
-			if (userRide != null) {
-				currentRide.setCurrentRequiredPersons(currentPersons - 1);
-				rideDao.updateRide(currentRide);
-			}
-			return CommonLib.getResponseString(userRide, "success", CommonLib.RESPONSE_SUCCESS);
-		} else
-			return CommonLib.getResponseString("failure", "", CommonLib.RESPONSE_FAILURE);
-	}
 }

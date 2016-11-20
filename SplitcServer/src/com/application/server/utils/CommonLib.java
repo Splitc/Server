@@ -10,7 +10,11 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.dom4j.Branch;
 
+import com.application.server.model.Ride;
+import com.application.server.model.RideRequest;
 import com.application.server.model.User;
+import com.application.server.model.pojo.Feed;
+import com.application.server.resource.FeedResource;
 import com.application.server.utils.exception.ZException;
 
 public class CommonLib {
@@ -41,6 +45,9 @@ public class CommonLib {
 	public static final String APP_CONFIG_KEY_RIDZ_CASHBACK_INR = "RIDZ_CASHBACK_INR";
 	public static final String APP_CONFIG_INTERCITY_CITIES = "INTERCITY_CITIES";
 	public static final String APP_CONFIG_INTERCITY_COMMISION_PERCENTAGE = "INTERCITY_COMMISION_PERCENTAGE";
+
+	public static final int FEED_TYPE_RIDE = 100;
+	public static final int FEED_TYPE_RIDE_REQUEST = 101;
 
 	public static final String WEB_CLIENT_ID = "zapp_web_client";
 	public static final String WEB_APP_TYPE = "zapp_web";
@@ -726,6 +733,56 @@ public class CommonLib {
 		return "3956 * 2 * ASIN(SQRT(POWER(SIN((" + myLatitude + " - " + locationLatitude
 				+ ") * pi()/180 / 2), 2) + COS(" + myLatitude + " * pi()/180) * COS(" + locationLatitude
 				+ " * pi()/180) * POWER(SIN((" + myLongitude + " - " + locationLongitude + ") * pi()/180 / 2), 2)))";
+	}
+
+	public static Feed getFeedItemFromRide(Ride ride) {
+		if (ride == null)
+			return null;
+		Feed feed = new Feed();
+		
+		feed.setRequiredPersons(ride.getRequiredPersons());
+		feed.setCreated(ride.getCreated());
+		feed.setDescription(ride.getDescription());
+		feed.setDropGooglePlaceId(ride.getDropGooglePlaceId());
+		feed.setDropLat(ride.getDropLat());
+		feed.setDropLon(ride.getDropLon());
+		feed.setFeedId(ride.getRideId());
+		feed.setFromAddress(ride.getFromAddress());
+		feed.setStartGooglePlaceId(ride.getStartGooglePlaceId());
+		feed.setStartLat(ride.getStartLat());
+		feed.setStartLon(ride.getStartLon());
+		feed.setStartTime(ride.getStartTime());
+		feed.setStatus(ride.getStatus());
+		feed.setToAddress(ride.getToAddress());
+		feed.setUserId(ride.getUserId());
+		feed.setFeedType(FeedResource.FILTER_SHOW_RIDES);
+		
+		return feed;
+	}
+	
+	public static Feed getFeedItemFromRideRequest(RideRequest ride) {
+		if (ride == null)
+			return null;
+		Feed feed = new Feed();
+		
+		feed.setRequiredPersons(ride.getPersons());
+		feed.setCreated(ride.getCreated());
+		feed.setDescription(ride.getDescription());
+		feed.setDropGooglePlaceId(ride.getDropGooglePlaceId());
+		feed.setDropLat(ride.getDropLat());
+		feed.setDropLon(ride.getDropLon());
+		feed.setFeedId(ride.getRideRequestId());
+		feed.setFromAddress(ride.getFromAddress());
+		feed.setStartGooglePlaceId(ride.getStartGooglePlaceId());
+		feed.setStartLat(ride.getStartLat());
+		feed.setStartLon(ride.getStartLon());
+		feed.setStartTime(ride.getStartTime());
+		feed.setStatus(ride.getStatus());
+		feed.setToAddress(ride.getToAddress());
+		feed.setUserId(ride.getUserId());
+		feed.setFeedType(FeedResource.FILTER_SHOW_RIDE_REQUESTS);
+		
+		return feed;
 	}
 
 }

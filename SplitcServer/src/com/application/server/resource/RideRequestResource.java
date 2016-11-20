@@ -22,6 +22,7 @@ import com.application.server.utils.CommonLib;
 import com.application.server.utils.JsonUtil;
 import com.application.server.utils.exception.ZException;
 
+@Path("/rideRequest")
 public class RideRequestResource extends BaseResource {
 
 	public static final String LOGGER = "RideRequestResource.class";

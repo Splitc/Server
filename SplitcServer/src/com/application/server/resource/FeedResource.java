@@ -72,9 +72,12 @@ public class FeedResource extends BaseResource {
 			try {
 				JSONArray ridesArr = new JSONArray();
 				for (Feed wish : feedItems) {
-					JSONObject wishJson = JsonUtil.getFeedJson(wish);
-					wishJson.put("user", JsonUtil.getUserJson(user));
-					ridesArr.put(wishJson);
+					User mUser = userDao.getUserDetailsFromUserId(wish.getUserId());
+					if (mUser != null) {
+						JSONObject wishJson = JsonUtil.getFeedJson(wish);
+						wishJson.put("user", JsonUtil.getUserJson(mUser));
+						ridesArr.put(wishJson);
+					}
 				}
 				returnObject.put("feedItems", ridesArr);
 				returnObject.put("total", size);

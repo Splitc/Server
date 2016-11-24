@@ -18,12 +18,9 @@ public class JsonUtil {
 		JSONObject userJson = new JSONObject();
 		userJsonObject.put("email", user.getEmail());
 		userJsonObject.put("user_id", user.getUserId() + "");
-		userJsonObject.put("is_verified", user.getIsVerified());
 		userJsonObject.put("description", user.getBio());
 		userJsonObject.put("phone", user.getPhone());
 		userJsonObject.put("profile_pic", user.getProfilePic());
-		userJsonObject.put("fbId", user.getFacebookId());
-		userJsonObject.put("contact", user.getPhone());
 		userJsonObject.put("user_name", CommonLib.getUserName(user));
 		
 		return userJsonObject;

@@ -198,4 +198,43 @@ public class UserDao extends BaseDao {
 
 	}
 	
+	public User getUserDetailsFromUserId(int userId) {
+
+		User user = null;
+		Session session = null;
+		info("getUserDetails enter");
+		try {
+
+			session = DBUtil.getSessionFactory().openSession();
+			Transaction transaction = session.beginTransaction();
+
+			String sql = "SELECT * FROM User WHERE UserId = :userId";
+			SQLQuery query = session.createSQLQuery(sql);
+			query.addEntity(User.class);
+			query.setParameter("userId", userId);
+			java.util.List results = (java.util.List) query.list();
+
+			for (Iterator iterator = ((java.util.List) results).iterator(); iterator.hasNext();) {
+				user = (User) iterator.next();
+			}
+
+			transaction.commit();
+			session.close();
+
+		} catch (HibernateException e) {
+			try {
+				throw new ZException("Error", e);
+			} catch (ZException e1) {
+				e1.printStackTrace();
+			}
+			error("Hibernate exception: " + e.getMessage());
+		} finally {
+			if (session != null && session.isOpen())
+				session.close();
+		}
+		info("getUserDetails exit");
+		return user;
+
+	}
+	
 }

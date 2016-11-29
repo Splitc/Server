@@ -70,6 +70,10 @@ public class CommonLib {
 	public static final int RIDE_STATUS_FULFILLED = 102;
 	public static final int RIDE_STATUS_EXPIRED = 103;
 	public static final int RIDE_STATUS_CANCELLED = 104;
+	
+	public static final String PUSH_COMMAND_MESSAGE = "message";
+	
+	public static final String PUSH_TYPE_CHAT = "chat";
 
 	public static final int RIDE_ACCEPTED = 200;
 	public static final int RIDE_CANCELLED = 201;
@@ -376,7 +380,7 @@ public class CommonLib {
 	 * Android API constants
 	 */
 	public static String projectId = "996855199819";
-	public static String apiKey = "AIzaSyBzi76XfJsZGSk-jHY0Wgr2XHecirwTiJY	";
+	public static String apiKey = "AIzaSyDd3liwf3urmZFFyk3XFTwYgFgxIHrQxxw";
 	public static final String GCM_SERVER = "gcm.googleapis.com";
 	public static final int GCM_PORT = 5235;
 	public static final String GCM_ELEMENT_NAME = "gcm";

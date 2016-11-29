@@ -104,4 +104,16 @@ public class JsonUtil {
 
 		return userJsonObject;
 	}
+	
+	public static JSONObject getMessageJson(int fromUserId, int toUserId, String message, int feedId, int type) throws JSONException {
+		JSONObject userJsonObject = new JSONObject();
+
+		userJsonObject.put("from", fromUserId);
+		userJsonObject.put("to", toUserId);
+		userJsonObject.put("message", message);
+		userJsonObject.put("feedId", feedId);
+		userJsonObject.put("type", type);
+
+		return userJsonObject;
+	}
 }

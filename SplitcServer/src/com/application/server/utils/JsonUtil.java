@@ -15,11 +15,7 @@ public class JsonUtil {
 			return null;
 		JSONObject userJsonObject = new JSONObject();
 
-		JSONObject userJson = new JSONObject();
-		userJsonObject.put("email", user.getEmail());
-		userJsonObject.put("user_id", user.getUserId() + "");
-		userJsonObject.put("description", user.getBio());
-		userJsonObject.put("phone", user.getPhone());
+		userJsonObject.put("user_id", user.getUserId());
 		userJsonObject.put("profile_pic", user.getProfilePic());
 		userJsonObject.put("user_name", CommonLib.getUserName(user));
 		

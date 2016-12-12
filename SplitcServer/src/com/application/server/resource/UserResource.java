@@ -8,12 +8,14 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.application.server.controller.UserDao;
 import com.application.server.controller.UserSessionDao;
 import com.application.server.model.User;
 import com.application.server.utils.CommonLib;
+import com.application.server.utils.JsonUtil;
 import com.application.server.utils.mailer.EmailModel;
 import com.application.server.utils.mailer.EmailUtil;
 
@@ -97,6 +99,33 @@ public class UserResource extends BaseResource {
 		UserSessionDao userSessionDao = new UserSessionDao();
 		if (user != null && user.getUserId() > 0 && userSessionDao.updateLocation(lat, lon, accessToken))
 			return CommonLib.getResponseString("success", "success", CommonLib.RESPONSE_SUCCESS);
+
+		return CommonLib.getResponseString("", "", CommonLib.RESPONSE_FAILURE);
+	}
+
+	@Path("/details")
+	@POST
+	@Produces("application/json")
+	@Consumes("application/x-www-form-urlencoded")
+	public JSONObject getUserDetails(@FormParam("client_id") String clientId, @FormParam("app_type") String appType,
+			@FormParam("access_token") String accessToken, @FormParam("userId") int userId) {
+
+		String clientCheck = super.clientCheck(clientId, appType);
+		if (clientCheck != null && !clientCheck.equals("success"))
+			return CommonLib.getResponseString("Invalid params", "", CommonLib.RESPONSE_INVALID_PARAMS);
+
+		UserDao dao = new UserDao();
+
+		User user = dao.userActive(accessToken);
+		if (user != null && user.getUserId() > 0) {
+			User otherUser = dao.getUserDetailsFromUserId(userId);
+			try {
+				return CommonLib.getResponseString(JsonUtil.getUserJson(otherUser), "success",
+						CommonLib.RESPONSE_SUCCESS);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
 
 		return CommonLib.getResponseString("", "", CommonLib.RESPONSE_FAILURE);
 	}

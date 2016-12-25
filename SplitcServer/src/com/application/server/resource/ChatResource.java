@@ -63,7 +63,7 @@ public class ChatResource extends BaseResource {
 			pushModel.setType(CommonLib.PUSH_TYPE_CHAT);
 			JSONObject pushJson = null;
 			try {
-				pushJson = JsonUtil.getMessageJson(user.getUserId(), userId, message, feedId, type);
+				pushJson = JsonUtil.getMessageJson(CommonLib.getUserName(user), user.getProfilePic(), user.getUserId(), userId, message, feedId, type);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

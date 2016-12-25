@@ -101,7 +101,7 @@ public class JsonUtil {
 		return userJsonObject;
 	}
 	
-	public static JSONObject getMessageJson(int fromUserId, int toUserId, String message, int feedId, int type) throws JSONException {
+	public static JSONObject getMessageJson(String fromUserName, String fromProfilePic, int fromUserId, int toUserId, String message, int feedId, int type) throws JSONException {
 		JSONObject userJsonObject = new JSONObject();
 
 		userJsonObject.put("from", fromUserId);
@@ -109,6 +109,12 @@ public class JsonUtil {
 		userJsonObject.put("message", message);
 		userJsonObject.put("feedId", feedId);
 		userJsonObject.put("type", type);
+		
+		userJsonObject.put("userId", fromUserId);
+		userJsonObject.put("userName", fromUserName);
+		userJsonObject.put("profilePic", fromProfilePic);
+		
+		userJsonObject.put("timestamp", System.currentTimeMillis());
 
 		return userJsonObject;
 	}

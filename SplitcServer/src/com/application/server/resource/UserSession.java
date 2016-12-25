@@ -1,5 +1,7 @@
 package com.application.server.resource;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -7,9 +9,7 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -21,6 +21,8 @@ import com.application.server.model.pojo.Location;
 import com.application.server.utils.CommonLib;
 import com.application.server.utils.JsonUtil;
 import com.application.server.utils.exception.ZException;
+import com.application.server.utils.mailer.EmailModel;
+import com.application.server.utils.mailer.EmailUtil;
 
 @Path("/auth")
 public class UserSession extends BaseResource {
@@ -85,6 +87,40 @@ public class UserSession extends BaseResource {
 			userToAdd.setFacebookToken(fbToken);
 
 			user = userDao.addUserDetails(userToAdd);
+
+			if (user != null) {
+				new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+
+						EmailModel eModel = new EmailModel();
+						eModel.setFrom(CommonLib.ZAPP_ID);
+						ArrayList<String> senders = new ArrayList<String>();
+						senders.add(email);
+						eModel.setSenders(senders);
+						eModel.setSubject(EmailUtil.USER_SIGNUP_SUBJECT);
+
+						String htmlMail = null;
+						try {
+
+							htmlMail = CommonLib.readFile(getClass().getResourceAsStream(
+									"/com/application/server/util/mailer/welcome/welcomeMail.html"));
+
+						} catch (Exception e) {
+							try {
+								throw new ZException("Error", e);
+							} catch (ZException e1) {
+								e1.printStackTrace();
+							}
+						}
+						eModel.setContent(htmlMail);
+						EmailUtil.getInstance().sendHtmlEmail(eModel);
+
+					}
+				}).start();
+			}
+
 		} else {
 			if (user != null) {
 

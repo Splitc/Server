@@ -193,48 +193,12 @@ public class EmailUtil {
 				+ "\n—> Ride as you wish - in comfort, on a budget, in the city or outstation", userName);
 	}
 
-	// Content when a user avails a voucher
-	public static final String USER_VOUCHER_AVAIL = "Congratulations!! Your voucher is here!";
-
-	public final String getVoucherContent(String value, String fromCompany, String voucherId, String pin) {
-		if (fromCompany != null && fromCompany.startsWith("Jab")) {
-			return String.format("Hey," + "\nYour gift voucher worth Rs %s is here. \n" + "Voucher Id: %s \n"
-					+ "Keep booking through Zapplon and keep winning more prizes."
-					+ "We are always there to help you out at hello@zapplon.com" + "Regards,\n" + "Zapplon Team", value,
-					voucherId, fromCompany);
-		} else {
-			return String.format("Hey," + "\nYour gift voucher worth Rs %s is here. \n" + "Voucher Id: %s \n"
-					+ "Pin: %s \n" + "Keep booking through Zapplon and keep winning more prizes."
-					+ "We are always there to help you out at hello@zapplon.com" + "Regards,\n" + "Zapplon Team", value,
-					voucherId, pin, fromCompany);
-		}
-	}
-
-	// Content when a user sends merchant's feedback
-	public static final String USER_MERCHANT_FEEDBACK_SUBJECT = "Zapplon User Feedback";
-
-	public final String getUserMerchantFeedbackContent(String user, int billAmount, int rating) {
-		return String.format(
-				"Hello," + "\nYou have been rated %d / 5 by %s on a bill of Rs. , by this customer.\n"
-						+ "Keep up the good work and keep on pushing great offers to boost up sales through Zapplon."
-						+ "We are always there to help you out at hello@zapplon.com" + "Regards,\n" + "Zapplon Team",
-				rating, user, billAmount);
-	}
-
 	// Content when a user sends feedback
-	public static final String USER_FEEDBACK_SUBJECT = "Zapplon Android Application Feedback";
-	public static final String USER_CONTACT_SUBJECT = "Zapplon Web contact request";
+	public static final String USER_FEEDBACK_SUBJECT = "Splitc Android Application Feedback";
+	public static final String USER_CONTACT_SUBJECT = "Splitc Web contact request";
 
 	public final String getFeedbackContent(String user, String message, String log) {
-		return String.format("Hi,\n You have a new feedback message from %d !\n\n" + "%s" + "%s", user, message, log);
+		return String.format("Hi,\n You have a new feedback message from %s !\n\n" + "%s \n\n" + "%s", user, message, log);
 	}
-
-	public final String getContactContent(String user, String log) {
-		return String.format("Hi,\n You have a new contact request from %s !\n\n" + "%s", user, log);
-	}
-
-	// Content when a user gets a cashback
-	public static final String CASHBACK_POINTS_ADDED = "Cashback points added";
-	public static final String REFERRAL_POINTS_ADDED = "Referral points added";
 
 }

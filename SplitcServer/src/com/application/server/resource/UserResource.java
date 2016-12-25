@@ -47,7 +47,7 @@ public class UserResource extends BaseResource {
 
 		if (user != null && user.getUserId() > 0) {
 			EmailModel eModel = new EmailModel();
-			eModel.setContent(EmailUtil.getInstance().getFeedbackContent(user.getUserName(), title, log));
+			eModel.setContent(EmailUtil.getInstance().getFeedbackContent(CommonLib.getUserName(user), title, log));
 			eModel.setSubject(EmailUtil.USER_FEEDBACK_SUBJECT);
 			eModel.setFrom(user.getEmail());
 			ArrayList<String> senders = new ArrayList<String>();
